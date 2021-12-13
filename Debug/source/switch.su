@@ -1,0 +1,5 @@
+core_cm0plus.h:745:22:NVIC_EnableIRQ	16	static
+core_cm0plus.h:791:22:NVIC_ClearPendingIRQ	16	static
+core_cm0plus.h:804:22:NVIC_SetPriority	24	static
+switch.c:31:6:init_switch	8	static
+switch.c:63:6:init_switch_interrupt	8	static

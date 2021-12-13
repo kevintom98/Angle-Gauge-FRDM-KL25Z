@@ -37,17 +37,7 @@ void author_handler();
 
 
 
-/* This function is the handler for author command.
- * This function prints the authors name
- *
- * Parameters:
- * 	argc - Number of arguments
- * 	argv - Array of arguments ending with '\0'
- *
- * Returns:
- * None
- * */
-void dump_handler(int argc, char *argv[]);
+
 
 
 
@@ -77,7 +67,6 @@ void set0();
 static const command_table_t commands[] =
 {
 		{"author", author_handler,"\n\rauthor  - This command will print the name of the author who wrote the command line\n\r"},
-		{"dump", dump_handler,"dump    - This command will print Hexdump of memory(eg: dump start_addr end_addr ; dump 0 0x64)\n\r"},
 		{"measure",measure_handler,"measure - This command will start measuring the angle\n\r"},
 		{"set0",set0,"set0    - This command will set the current angle as 0\n\r"},
 		{"help", help_handler," "}
@@ -115,6 +104,7 @@ void command_processor_start();
  *
  * */
 void process_command(char *input);
+
 
 
 #endif // _COMMAND_PROCESSOR_H_

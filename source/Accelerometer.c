@@ -11,6 +11,7 @@
 #include <math.h>
 #include "fsl_debug_console.h"
 #include <stdio.h>
+#include "Delay.h"
 
 int16_t acc_X=0, acc_Y=0, acc_Z=0;
 float roll=0.0, pitch=0.0;
@@ -20,13 +21,7 @@ extern uint32_t DATA_READY;
 
 
 
-void Delay (uint32_t dly)
-{
-  volatile uint32_t t;
 
-	for (t=dly*10000; t>0; t--)
-		;
-}
 
 
 //initializes mma8451 sensor
@@ -82,6 +77,8 @@ void read_xyz(void)
 	acc_Z = (int8_t) i2c_read_byte(MMA_ADDR, REG_ZHI);
 
 }
+
+
 
 float convert_xyz_to_roll_pitch()
 {

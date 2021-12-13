@@ -11,7 +11,7 @@
 #include <stdlib.h>  // for size_t
 
 
-//Max size of the circular buffer is 128 bytes
+//Max size of the circular buffer is 256 bytes
 #define MAX_SIZE 256
 
 

@@ -9,7 +9,8 @@ source/Final_Project.o source/Final_Project.d: ../source/Final_Project.c \
  E:\Mine\Kevin\Masters\1st\ Semester\ECEN\ 5813-\ Principles\ of\ Embedded\ Software\Workspace\Final_Project\CMSIS/system_MKL25Z4.h \
  ../source/UART.h \
  E:\Mine\Kevin\Masters\1st\ Semester\ECEN\ 5813-\ Principles\ of\ Embedded\ Software\Workspace\Final_Project\CMSIS/MKL25Z4.H \
- ../source/command_processor.h ../source/init.h
+ ../source/command_processor.h ../source/PWM.h ../source/switch.h \
+ ../source/led.h ../source/test_led.h
 
 ../source/Accelerometer.h:
 
@@ -37,4 +38,10 @@ E:\Mine\Kevin\Masters\1st\ Semester\ECEN\ 5813-\ Principles\ of\ Embedded\ Softw
 
 ../source/command_processor.h:
 
-../source/init.h:
+../source/PWM.h:
+
+../source/switch.h:
+
+../source/led.h:
+
+../source/test_led.h:

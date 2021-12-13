@@ -17,81 +17,12 @@
 #include <math.h>
 
 #include "command_processor.h"
-#include "hexdump.h"
 #include "Accelerometer.h"
 #include "UART.h"
+#include "PWM.h"
 
-
-#define transition_factor 0.01
 
 static float calibration_value = 0;
-
-/*This structure holds all the necessary variables for state machine*/
-static struct
-{
-	double led_red;
-	double led_green;
-	double led_blue;
-}current =
-{
-	.led_red = 00,
-	.led_green = 00,
-	.led_blue = 00
-};
-
-
-
-/*
- * This function sets PWM for specific pins according to value given
- *
- * The value is multiplied by 256 to map it to period of 48000 given as
- * PWN period while initializing, we are getting wide range of values to
- * control the led.
- *
- *
- * Parameters :
- *	red   - red   led tpm value
- *	green - green led tpm value
- *	blue  - blue  led tpm value
- *
- * Returns : None
- *
- * */
-void tpm_function(int red, int green, int blue)
-{
-	TPM2->CONTROLS[0].CnV = (red  <<8);   //Red
-	TPM2->CONTROLS[1].CnV = (green<<8); //Green
-	TPM0->CONTROLS[1].CnV = (blue <<8);  //Blue
-}
-
-
-/*
- * This function helps in transition from any led color to any state color.
- *
- * The function calls tpm_function for setting the led colors.
- * The function will also set the state to final state after transition.
- *
- * Parameters :
- *		RED   : Final state RED LED color
- *		GREEN : Final state GREEN LED color
- *		BLUE  : Final state BLUE LED color
- *		state : State to which transition should happen
- *
- * Returns : None
- *
- * */
-void transition_to_any_state(int RED,int GREEN, int BLUE)
-{
-	current.led_red   = ((RED -current.led_red)   *transition_factor)+current.led_red;
-	current.led_green = ((GREEN-current.led_green)*transition_factor)+current.led_green;
-	current.led_blue  = ((BLUE -current.led_blue) *transition_factor)+current.led_blue;
-
-	tpm_function(current.led_red,current.led_green,current.led_blue);
-}
-
-
-
-
 
 /* This function is the handler for author command.
  * This function prints the authors name
@@ -114,40 +45,35 @@ void author_handler()
 
 
 
-
-
-/* This function is the handler for author command.
- * This function prints the authors name
+/*
+ * This function is the interrupt handler for hardware button press.
  *
- * Parameters:
- * 	argc - Number of arguments
- * 	argv - Array of arguments ending with '\0'
+ * This function sets a global variable and clears interrupt after it
+ * is encountered
  *
- * Returns:
- * None
+ * Parameters : None
+ *
+ * Returns : None
  *
  *
  * */
-void dump_handler(int argc, char *argv[])
+void PORTD_IRQHandler(void)
 {
+	/*Checking if ISFR  triggered*/
+	if( (PORTD->ISFR & (1<<3)) == 0)
+		return;
 
-	int start = 0, len = 0;
+	read_full_xyz();
+	calibration_value = convert_xyz_to_roll_pitch();
+	printf("\n\rCalibration value set to : %f\n\r",calibration_value);
+	printf("# ");
 
-	//Converting start address to from hex to decimal
-	start = (int)strtol(argv[1],NULL,16);
-
-	/*If given address is in hex convert it into decimal
-	 * Else convert it into decimal from string
-	 */
-	if((*(argv[2]) == '0') && (*(argv[2]+1) == 'x'))
-		len = (int)strtol(argv[2],NULL,16);
-	else
-		len = atoi(argv[2]);
-
-
-	//Calling the hexdump function
-	hexdump((int *)start,len);
+	/*Clears the Interrupt*/
+	PORTD->ISFR &= (1 << 3);
 }
+
+
+
 
 
 
@@ -181,8 +107,14 @@ void help_handler()
 
 void measure_handler(int argc, char *argv[])
 {
-	float target = atof(argv[1]),tilt=0, percentage = 0;
+	float target = atof(argv[1]),tilt=0, percentage = 0, calibration = 0;
 	//int previous_tilt_difference = 0, current_tilt_difference = 0;
+
+	if((target > 180) || (target < 0))
+	{
+		printf("\n\rInvalid target angle");
+		return;
+	}
 
 	target = (int)(atof(argv[1]) * 100 + 0.5);
 
@@ -191,23 +123,22 @@ void measure_handler(int argc, char *argv[])
 	printf("\n\rTarget angle %f",target);
 
 
-	//previous_tilt_difference = target;
-
 	while(1)
 	{
 		read_full_xyz();
 
-		tilt = (int)((convert_xyz_to_roll_pitch() - calibration_value) * 100 + 0.5) ;
+		calibration = convert_xyz_to_roll_pitch() - calibration_value;
+
+		tilt = (int)((calibration) * 100 + 0.5) ;
 
 		tilt = (tilt / 100);
 
-		percentage = tilt/target;
-
-		if(percentage >= 1)
-			tpm_function(percentage * 255, 0, 0);
+		if(tilt >= 0)
+			percentage = tilt/target;
 		else
-			tpm_function(0,percentage * 255, 0);
+			percentage = (-tilt)/target;
 
+		transition_to_any_state(0,percentage * 255, 0);
 
 		printf("\n\rTilt : %f",tilt);
 
@@ -216,11 +147,20 @@ void measure_handler(int argc, char *argv[])
 		if(tilt == target)
 		{
 			printf("\n\rReached target angle %f\n\r",target);
+			tpm_function(0,0,255);
+			Delay(200);
+			tpm_function(0,0,0);
+			Delay(200);
+			tpm_function(0,0,255);
+			Delay(200);
 			tpm_function(0,0,0);
 			break;
 		}
 	}
 }
+
+
+
 
 
 
@@ -230,6 +170,13 @@ void set0()
 	calibration_value = convert_xyz_to_roll_pitch();
 	printf("\n\rCalibration value set to : %f\n\r",calibration_value);
 }
+
+
+
+
+
+
+
 
 
 /* This function starts the command processor and handles the commands recevied

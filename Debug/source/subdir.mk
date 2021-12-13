@@ -5,45 +5,54 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../source/Accelerometer.c \
+../source/Delay.c \
 ../source/Final_Project.c \
+../source/PWM.c \
 ../source/UART.c \
 ../source/cbfifo.c \
 ../source/command_processor.c \
-../source/hexdump.c \
 ../source/i2c.c \
-../source/init.c \
+../source/led.c \
 ../source/mtb.c \
 ../source/semihost_hardfault.c \
+../source/switch.c \
 ../source/sysclock.c \
-../source/test_cbfifo.c 
+../source/test_cbfifo.c \
+../source/test_led.c 
 
 OBJS += \
 ./source/Accelerometer.o \
+./source/Delay.o \
 ./source/Final_Project.o \
+./source/PWM.o \
 ./source/UART.o \
 ./source/cbfifo.o \
 ./source/command_processor.o \
-./source/hexdump.o \
 ./source/i2c.o \
-./source/init.o \
+./source/led.o \
 ./source/mtb.o \
 ./source/semihost_hardfault.o \
+./source/switch.o \
 ./source/sysclock.o \
-./source/test_cbfifo.o 
+./source/test_cbfifo.o \
+./source/test_led.o 
 
 C_DEPS += \
 ./source/Accelerometer.d \
+./source/Delay.d \
 ./source/Final_Project.d \
+./source/PWM.d \
 ./source/UART.d \
 ./source/cbfifo.d \
 ./source/command_processor.d \
-./source/hexdump.d \
 ./source/i2c.d \
-./source/init.d \
+./source/led.d \
 ./source/mtb.d \
 ./source/semihost_hardfault.d \
+./source/switch.d \
 ./source/sysclock.d \
-./source/test_cbfifo.d 
+./source/test_cbfifo.d \
+./source/test_led.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
