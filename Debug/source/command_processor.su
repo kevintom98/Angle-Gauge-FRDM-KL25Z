@@ -4,6 +4,6 @@ command_processor.c:107:6:author_handler	8	static
 command_processor.c:131:6:dump_handler	24	static
 command_processor.c:165:6:help_handler	16	static
 command_processor.c:182:6:measure_handler	32	static
-command_processor.c:246:6:set0	8	static
-command_processor.c:264:6:command_processor_start	120	static
-command_processor.c:330:6:process_command	88	static
+command_processor.c:227:6:set0	8	static
+command_processor.c:245:6:command_processor_start	120	static
+command_processor.c:311:6:process_command	88	static
