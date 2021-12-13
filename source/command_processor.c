@@ -25,6 +25,73 @@
 
 static float calibration_value = 0;
 
+/*This structure holds all the necessary variables for state machine*/
+static struct
+{
+	double led_red;
+	double led_green;
+	double led_blue;
+}current =
+{
+	.led_red = 255,
+	.led_green = 00,
+	.led_blue = 00
+};
+
+
+
+/*
+ * This function sets PWM for specific pins according to value given
+ *
+ * The value is multiplied by 256 to map it to period of 48000 given as
+ * PWN period while initializing, we are getting wide range of values to
+ * control the led.
+ *
+ *
+ * Parameters :
+ *	red   - red   led tpm value
+ *	green - green led tpm value
+ *	blue  - blue  led tpm value
+ *
+ * Returns : None
+ *
+ * */
+void tpm_function(int red, int green, int blue)
+{
+	TPM2->CONTROLS[0].CnV = (red  <<8);   //Red
+	TPM2->CONTROLS[1].CnV = (green<<8); //Green
+	TPM0->CONTROLS[1].CnV = (blue <<8);  //Blue
+}
+
+
+/*
+ * This function helps in transition from any led color to any state color.
+ *
+ * The function calls tpm_function for setting the led colors.
+ * The function will also set the state to final state after transition.
+ *
+ * Parameters :
+ *		RED   : Final state RED LED color
+ *		GREEN : Final state GREEN LED color
+ *		BLUE  : Final state BLUE LED color
+ *		state : State to which transition should happen
+ *
+ * Returns : None
+ *
+ * */
+void transition_to_any_state(int RED,int GREEN, int BLUE)
+{
+	current.led_red   = ((RED -current.led_red)   *transition_factor)+current.led_red;
+	current.led_green = ((GREEN-current.led_green)*transition_factor)+current.led_green;
+	current.led_blue  = ((BLUE -current.led_blue) *transition_factor)+current.led_blue;
+
+	tpm_function(current.led_red,current.led_green,current.led_blue);
+}
+
+
+
+
+
 /* This function is the handler for author command.
  * This function prints the authors name
  *
