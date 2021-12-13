@@ -129,14 +129,15 @@ void measure_handler(int argc, char *argv[])
 
 		calibration = convert_xyz_to_roll_pitch() - calibration_value;
 
+		if(calibration < 0)
+			calibration = fabs(calibration);
+
 		tilt = (int)((calibration) * 100 + 0.5) ;
 
 		tilt = (tilt / 100);
 
-		if(tilt >= 0)
-			percentage = tilt/target;
-		else
-			percentage = (-tilt)/target;
+		percentage = tilt/target;
+
 
 		transition_to_any_state(0,percentage * 255, 0);
 
