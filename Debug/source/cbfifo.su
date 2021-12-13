@@ -1,0 +1,5 @@
+cbfifo.c:46:8:cbfifo_enqueue	72	static
+cbfifo.c:129:8:cbfifo_dequeue	80	static
+cbfifo.c:242:8:cbfifo_length	16	static
+cbfifo.c:259:8:cbfifo_capacity	16	static
+cbfifo.c:273:6:cbfifo_dump	24	static

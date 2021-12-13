@@ -1,0 +1,7 @@
+command_processor.c:39:6:author_handler	8	static
+command_processor.c:63:6:dump_handler	24	static
+command_processor.c:97:6:help_handler	16	static
+command_processor.c:114:6:measure_handler	24	static
+command_processor.c:148:6:set0	8	static
+command_processor.c:166:6:command_processor_start	120	static
+command_processor.c:232:6:process_command	88	static
