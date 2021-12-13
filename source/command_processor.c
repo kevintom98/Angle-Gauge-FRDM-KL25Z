@@ -22,6 +22,7 @@
 #include "UART.h"
 
 
+#define transition_factor 0.01
 
 static float calibration_value = 0;
 
@@ -33,7 +34,7 @@ static struct
 	double led_blue;
 }current =
 {
-	.led_red = 255,
+	.led_red = 00,
 	.led_green = 00,
 	.led_blue = 00
 };
@@ -181,6 +182,7 @@ void help_handler()
 void measure_handler(int argc, char *argv[])
 {
 	float target = atof(argv[1]),tilt=0;
+	int previous_tilt_difference = 0, current_tilt_difference = 0;
 
 	target = (int)(atof(argv[1]) * 100 + 0.5);
 
@@ -188,7 +190,8 @@ void measure_handler(int argc, char *argv[])
 
 	printf("\n\rTarget angle %f",target);
 
-	Delay(500);
+
+	previous_tilt_difference = target;
 
 	while(1)
 	{
@@ -198,14 +201,30 @@ void measure_handler(int argc, char *argv[])
 
 		tilt = (tilt / 100);
 
-		//tilt = tilt - calibration_value;
+		current_tilt_difference = target - tilt;
+
+
+		if(current_tilt_difference > target)
+		{
+			transition_to_any_state(255,0,0);
+			previous_tilt_difference = current_tilt_difference;
+		}
+		else if(current_tilt_difference < previous_tilt_difference)
+		{
+			transition_to_any_state(0,255,0);
+			previous_tilt_difference = current_tilt_difference;
+		}
+
 
 		printf("\n\rTilt : %f",tilt);
+
+
 
 		if(tilt == target)
 		{
 			printf("\n\rReached target angle %f\n\r",target);
 			break;
+			tpm_function(0,0,0);
 		}
 	}
 }
