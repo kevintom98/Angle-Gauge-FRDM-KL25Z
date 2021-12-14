@@ -77,7 +77,7 @@ void tpm_function(int red, int green, int blue)
  * Returns : None
  *
  * */
-void transition_to_any_state(int RED,int GREEN, int BLUE)
+void transition(int RED,int GREEN, int BLUE)
 {
 	current.led_red   = ((RED -current.led_red)   *transition_factor)+current.led_red;
 	current.led_green = ((GREEN-current.led_green)*transition_factor)+current.led_green;

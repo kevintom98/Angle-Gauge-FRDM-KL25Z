@@ -34,7 +34,6 @@
 void Init_UART0(uint32_t baud_rate)
 {
 	uint16_t sbr;
-	uint8_t temp;
 
 	// Enable clock gating for UART0 and Port A
 	SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;  //0100 0000 0000 11th bit
@@ -89,7 +88,6 @@ void Init_UART0(uint32_t baud_rate)
 	UART0->C2 |= UART0_C2_RE(1) | UART0_C2_TE(1);
 
 	// Clear the UART RDRF flag
-	temp = UART0->D;
 	UART0->S1 &= ~UART0_S1_RDRF_MASK;
 
 }
@@ -240,22 +238,6 @@ int __sys_readc(void)
 		return 0;
 }
 
-
-
-/*int my_nonblocking_getchar()
-{
-	char c;
-
-	//Wait till something is written into RX_Buffer, i.e, wait till use writes something
-	if((cbfifo_length(RX_Buffer)==0))
-		return 0;
-
-	//After RX_Buffer has value dequeue it and return
-	if(cbfifo_dequeue(&c, 1, RX_Buffer) == 1)
-		return c;
-	else
-		return -1;
-}*/
 
 
 

@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-void transition_to_any_state(int RED,int GREEN, int BLUE);
+void transition(int RED,int GREEN, int BLUE);
 void tpm_function(int red, int green, int blue);
 void tpm_config(uint16_t period);
 

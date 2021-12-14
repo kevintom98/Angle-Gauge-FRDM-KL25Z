@@ -1,8 +1,8 @@
-command_processor.c:38:6:author_handler	8	static
-command_processor.c:60:6:PORTD_IRQHandler	8	static
-command_processor.c:91:6:help_handler	16	static
-command_processor.c:108:6:measure_handler	32	static
-command_processor.c:166:6:set0_handler	8	static
-command_processor.c:174:6:test_handler	8	static
-command_processor.c:196:6:command_processor_start	120	static
-command_processor.c:262:6:process_command	88	static
+command_processor.c:39:6:author_handler	8	static
+command_processor.c:64:6:PORTD_IRQHandler	8	static
+command_processor.c:95:6:help_handler	16	static
+command_processor.c:123:6:measure_handler	32	static
+command_processor.c:198:6:set0_handler	8	static
+command_processor.c:218:6:test_handler	8	static
+command_processor.c:240:6:command_processor_start	120	static
+command_processor.c:306:6:process_command	88	static

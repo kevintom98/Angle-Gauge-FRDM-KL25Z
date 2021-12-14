@@ -7,10 +7,19 @@
 
 #include <MKL25Z4.H>
 #include "i2c.h"
+
+//variable used for lock detection
 int lock_detect=0;
 int i2c_lock=0;
 
-//init i2c0
+/*
+ * This function sets initializes i2c on the device to accelerometer
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 void i2c_init(void)
 {
 	//clock i2c peripheral and port E
@@ -35,6 +44,15 @@ void i2c_init(void)
 }
 
 
+
+/*
+ * This function keeps the i2c line busy
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 void i2c_busy(void)
 {
 	// Start Signal
@@ -52,19 +70,19 @@ void i2c_busy(void)
 	I2C0->S |= I2C_S_IICIF_MASK; /* clear interrupt bit */
 
 
-							/* Clear arbitration error flag*/
+	/* Clear arbitration error flag*/
 	I2C0->S |= I2C_S_ARBL_MASK;
 
 
-							/* Send start */
+	/* Send start */
 	I2C0->C1 &= ~I2C_C1_IICEN_MASK;
 	I2C0->C1 |= I2C_C1_TX_MASK; /* Set transmit (TX) mode */
 	I2C0->C1 |= I2C_C1_MST_MASK; /* START signal generated */
 
 	I2C0->C1 |= I2C_C1_IICEN_MASK;
-							/*Wait until start is send*/
+	/*Wait until start is send*/
 
-							/* Send stop */
+	/* Send stop */
 	I2C0->C1 &= ~I2C_C1_IICEN_MASK;
 	I2C0->C1 |= I2C_C1_MST_MASK;
 	I2C0->C1 &= ~I2C_C1_MST_MASK; /* set SLAVE mode */
@@ -72,14 +90,26 @@ void i2c_busy(void)
 	I2C0->C1 |= I2C_C1_IICEN_MASK;
 
 
-								/* wait */
-							/* Clear arbitration error & interrupt flag*/
+	/* wait */
+	/* Clear arbitration error & interrupt flag*/
 	I2C0->S |= I2C_S_IICIF_MASK;
 	I2C0->S |= I2C_S_ARBL_MASK;
 	lock_detect=0;
 	i2c_lock=1;
 }
 
+
+
+
+
+/*
+ * This function keeps the i2c line in wait
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 #pragma no_inline
 void i2c_wait(void) {
 	lock_detect = 0;
@@ -91,92 +121,139 @@ void i2c_wait(void) {
 	I2C0->S |= I2C_S_IICIF_MASK;
 }
 
-//send start sequence
+
+
+
+
+/*
+ * This function sends the i2c start sequence
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 void i2c_start()
 {
-	I2C_TRAN;							/*set to transmit mode */
-	I2C_M_START;					/*send start	*/
+	I2C_TRAN;	/*set to transmit mode */
+	I2C_M_START;/*send start	*/
 }
 
-//send device and register addresses
+
+
+/*
+ * This function sets the line for read
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 #pragma no_inline
 void i2c_read_setup(uint8_t dev, uint8_t address)
 {
-	I2C0->D = dev;			  /*send dev address	*/
-	I2C_WAIT							/*wait for completion */
+	I2C0->D = dev;/*send dev address*/
+	I2C_WAIT/*wait for completion */
 
-	I2C0->D =  address;		/*send read address	*/
-	I2C_WAIT							/*wait for completion */
+	I2C0->D =  address;/*send read address*/
+	I2C_WAIT/*wait for completion */
 
-	I2C_M_RSTART;				   /*repeated start */
-	I2C0->D = (dev|0x1);	 /*send dev address (read)	*/
-	I2C_WAIT							 /*wait for completion */
+	I2C_M_RSTART;/*repeated start */
+	I2C0->D = (dev|0x1);/*send dev address (read)*/
+	I2C_WAIT/*wait for completion */
 
-	I2C_REC;						   /*set to receive mode */
+	I2C_REC;/*set to receive mode */
 
 }
 
-//read a byte and ack/nack as appropriate
-// #pragma no_inline
+
+/*
+ * This function reads from i2c line and ack/nack as required
+ *
+ * Parameters : uint8_t isLastRead - is this last read or not
+ *
+ * Returns : uint8_t - value read
+ *
+ * */
 uint8_t i2c_repeated_read(uint8_t isLastRead)
 {
 	uint8_t data;
 
 	lock_detect = 0;
 
-	if(isLastRead)	{
-		NACK;								/*set NACK after read	*/
-	} else	{
-		ACK;								/*ACK after read	*/
+	if(isLastRead)
+	{
+		NACK;/*set NACK after read	*/
+	} else
+	{
+		ACK;/*ACK after read	*/
 	}
 
-	data = I2C0->D;				/*dummy read	*/
-	I2C_WAIT							/*wait for completion */
+	data = I2C0->D;	/*dummy read	*/
+	I2C_WAIT/*wait for completion */
 
-	if(isLastRead)	{
-		I2C_M_STOP;					/*send stop	*/
+	if(isLastRead)
+	{
+		I2C_M_STOP;/*send stop	*/
 	}
-	data = I2C0->D;				/*read data	*/
+	data = I2C0->D;/*read data	*/
 
 	return  data;
 }
 
 
 
-//////////funcs for reading and writing a single byte
-//using 7bit addressing reads a byte from dev:address
-// #pragma no_inline
+
+/*
+ * This function is for reading and writing a single byte using
+ * 7 bit addressing reads a byte from dev:address
+ *
+ * Parameters : uint8_t dev - device
+ * 				uint8_t address - device address
+ *
+ * Returns : uint8_t - value read
+ *
+ * */
 uint8_t i2c_read_byte(uint8_t dev, uint8_t address)
 {
 	uint8_t data;
 
-	I2C_TRAN;							/*set to transmit mode */
-	I2C_M_START;					/*send start	*/
-	I2C0->D = dev;			  /*send dev address	*/
-	I2C_WAIT							/*wait for completion */
+	I2C_TRAN;		/*set to transmit mode */
+	I2C_M_START;	/*send start	*/
+	I2C0->D = dev;  /*send dev address	*/
+	I2C_WAIT		/*wait for completion */
 
-	I2C0->D =  address;		/*send read address	*/
-	I2C_WAIT							/*wait for completion */
+	I2C0->D =  address;	/*send read address	*/
+	I2C_WAIT			/*wait for completion */
 
-	I2C_M_RSTART;				   /*repeated start */
-	I2C0->D = (dev|0x1);	 /*send dev address (read)	*/
-	I2C_WAIT							 /*wait for completion */
+	I2C_M_RSTART;		/*repeated start */
+	I2C0->D = (dev|0x1);/*send dev address (read)	*/
+	I2C_WAIT			/*wait for completion */
 
-	I2C_REC;						   /*set to recieve mode */
-	NACK;									 /*set NACK after read	*/
+	I2C_REC;			/*set to recieve mode */
+	NACK;				/*set NACK after read	*/
 
-	data = I2C0->D;					/*dummy read	*/
-	I2C_WAIT								/*wait for completion */
+	data = I2C0->D;		/*dummy read	*/
+	I2C_WAIT			/*wait for completion */
 
-	I2C_M_STOP;							/*send stop	*/
-	data = I2C0->D;					/*read data	*/
+	I2C_M_STOP;			/*send stop	*/
+	data = I2C0->D;		/*read data	*/
 
 	return data;
 }
 
 
-
-//using 7bit addressing writes a byte data to dev:address
+/*
+ * This function is for writing a single byte using
+ * 7 bit addressing write a byte to dev:address
+ *
+ * Parameters : uint8_t dev - device
+ * 				uint8_t address - device address
+ * 				uint8_t data - data to be written
+ *
+ * Returns : None
+ *
+ * */
 #pragma no_inline
 void i2c_write_byte(uint8_t dev, uint8_t address, uint8_t data)
 {

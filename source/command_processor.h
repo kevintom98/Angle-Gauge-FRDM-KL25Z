@@ -55,12 +55,43 @@ void author_handler();
 void help_handler();
 
 
-
+/* This function is the handler for measure command.
+ * This function runs a while loop and exists it when
+ * angle is reached
+ *
+ * Parameters:
+ * None
+ *
+ * Returns:
+ * None
+ *
+ * */
 void measure_handler();
 
 
+/* This function is the handler for set0 command.
+ * Thi command sets the current angle as 0
+ *
+ * Parameters:
+ * None
+ *
+ * Returns:
+ * None
+ *
+ * */
 void set0_handler();
 
+
+/* This function is the handler for test command
+ * Runs tests on the device
+ *
+ * Parameters:
+ * None
+ *
+ * Returns:
+ * None
+ *
+ * */
 void test_handler();
 
 

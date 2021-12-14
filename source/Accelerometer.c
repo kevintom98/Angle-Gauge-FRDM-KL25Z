@@ -3,6 +3,8 @@
  *
  *  Created on: 07-Dec-2021
  *      Author: Kevin Tom
+ *      Brief : This file has all the functions needed for accelerometer initialization
+ *      		and calculations
  */
 
 #include <MKL25Z4.H>
@@ -102,20 +104,28 @@ void read_xyz(void)
 
 
 
-float convert_xyz_to_roll_pitch()
+
+/* This function converts the readings to tilt value.
+ *
+ * Parameters: None
+ *
+ * Returns: float - Calculated tilt value
+ *
+ * */
+float convert_xyz_to_tilt()
 {
 	float ax = acc_X/COUNTS_PER_G,
 				ay = acc_Y/COUNTS_PER_G,
 				az = acc_Z/COUNTS_PER_G;
 
-	//roll = atan2(ay, az)*180/M_PI;
-	//pitch = atan2(ax, sqrt(ay*ay + az*az))*180/M_PI;
 
-
+	//Variable for calculation
 	float tilt_angle = 0,axx = ax * ax,ayy = ay*ay,azz = az*az;
 
+	//value to be calculated arc cosine of
 	float acosvalue = (az)/(sqrt(axx+ayy+azz));
 
+	//Calculating arc cosine and converting it to degrees
 	tilt_angle = acos(acosvalue) * 180/M_PI;
 
 	return tilt_angle;

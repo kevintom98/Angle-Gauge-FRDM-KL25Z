@@ -21,6 +21,7 @@
 #include "UART.h"
 #include "PWM.h"
 #include "state_machine.h"
+#include "Delay.h"
 
 static float calibration_value = 0;
 
@@ -49,7 +50,10 @@ void author_handler()
  * This function is the interrupt handler for hardware button press.
  *
  * This function sets a global variable and clears interrupt after it
- * is encountered
+ * is encountered.
+ *
+ * That is why it is kept in this file, this file updates variable inside
+ * this file
  *
  * Parameters : None
  *
@@ -64,7 +68,7 @@ void PORTD_IRQHandler(void)
 		return;
 
 	read_full_xyz();
-	calibration_value = convert_xyz_to_roll_pitch();
+	calibration_value = convert_xyz_to_tilt();
 	printf("\n\rCalibration value set to : %f\n\r",calibration_value);
 	printf("# ");
 
@@ -105,18 +109,30 @@ void help_handler()
 
 
 
+/* This function is the handler for measure command.
+ * This function runs a while loop and exists it when
+ * angle is reached
+ *
+ * Parameters:
+ * None
+ *
+ * Returns:
+ * None
+ *
+ * */
 void measure_handler(int argc, char *argv[])
 {
 	float target = 0,tilt=0, percentage = 0, calibration = 0;
 
+	//Checking if input is valid
 	if((target > 180) || (target < 0))
 	{
 		printf("\n\rInvalid target angle");
 		return;
 	}
 
+	//Converting value to 2 point precision
 	target = (int)(atof(argv[1]) * 100 + 0.5);
-
 	target = target / 100;
 
 	printf("\n\rTarget angle %f",target);
@@ -126,26 +142,32 @@ void measure_handler(int argc, char *argv[])
 	{
 		read_full_xyz();
 
-		calibration = convert_xyz_to_roll_pitch() - calibration_value;
+		//Setting the calibrated value
+		calibration = convert_xyz_to_tilt() - calibration_value;
 
 		if(calibration < 0)
 			calibration = fabs(calibration);
 
+		//Converting value to 2 point precision
 		tilt = (int)((calibration) * 100 + 0.5) ;
-
 		tilt = (tilt / 100);
 
+		//Calculating percentage for PWM
 		percentage = tilt/target;
 
-		transition_to_any_state(0,percentage * 255, 0);
+		//PWM transition
+		transition(0,percentage * 255, 0);
 
 		printf("\n\rTilt : %f",tilt);
 
 
 
+		//If target angle is reached blink LED and print result
 		if(tilt == target)
 		{
 			printf("\n\rReached target angle %f\n\r",target);
+
+			//Angle reached blinking pattern
 			tpm_function(0,0,255);
 			Delay(200);
 			tpm_function(0,0,0);
@@ -153,6 +175,7 @@ void measure_handler(int argc, char *argv[])
 			tpm_function(0,0,255);
 			Delay(200);
 			tpm_function(0,0,0);
+
 			break;
 		}
 	}
@@ -162,15 +185,36 @@ void measure_handler(int argc, char *argv[])
 
 
 
-
+/* This function is the handler for set0 command.
+ * Thi command sets the current angle as 0
+ *
+ * Parameters:
+ * None
+ *
+ * Returns:
+ * None
+ *
+ * */
 void set0_handler()
 {
+	//Measuring current value
 	read_full_xyz();
-	calibration_value = convert_xyz_to_roll_pitch();
+	calibration_value = convert_xyz_to_tilt();
 	printf("\n\rCalibration value set to : %f\n\r",calibration_value);
 }
 
 
+
+/* This function is the handler for test command
+ * Runs tests on the device
+ *
+ * Parameters:
+ * None
+ *
+ * Returns:
+ * None
+ *
+ * */
 void test_handler()
 {
 	printf("\n\n\r\rRunning tests\n\n\r");

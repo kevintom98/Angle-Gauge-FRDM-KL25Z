@@ -19,7 +19,7 @@ void test_angle(float target)
 	{
 	read_full_xyz();
 
-	tilt = (int)(convert_xyz_to_roll_pitch() * 100 + 0.5) ;
+	tilt = (int)(convert_xyz_to_tilt() * 100 + 0.5) ;
 
 	tilt = (tilt / 100);
 
