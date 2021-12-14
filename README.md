@@ -7,7 +7,7 @@ Code forPES-Final_Project, ECEN-5813,  Fall 2021
 **Operating System**  - Windows 10 Home  
 ****************************************************************************************************************
 
-## Demo Video Link : 
+## Demo Video Link : https://drive.google.com/file/d/1oIr_fNSRlbOBn8hfRs_yd6o9VZI9CJ8w/view?usp=sharing
 
 ## How to compile and run the file    
     1. Open MCUXpresso IDE and export the project 
