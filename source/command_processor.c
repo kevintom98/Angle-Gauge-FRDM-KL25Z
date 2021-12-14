@@ -20,7 +20,7 @@
 #include "Accelerometer.h"
 #include "UART.h"
 #include "PWM.h"
-
+#include "state_machine.h"
 
 static float calibration_value = 0;
 
@@ -137,7 +137,7 @@ void measure_handler(int argc, char *argv[])
 
 		percentage = tilt/target;
 
-		tpm_function(0,percentage * 255, 0);
+		transition_to_any_state(0,percentage * 255, 0);
 
 		printf("\n\rTilt : %f",tilt);
 
@@ -163,7 +163,7 @@ void measure_handler(int argc, char *argv[])
 
 
 
-void set0()
+void set0_handler()
 {
 	read_full_xyz();
 	calibration_value = convert_xyz_to_roll_pitch();
@@ -171,6 +171,11 @@ void set0()
 }
 
 
+void test_handler()
+{
+	printf("\n\n\r\rRunning tests\n\n\r");
+	test_system();
+}
 
 
 

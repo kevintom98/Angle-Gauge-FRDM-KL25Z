@@ -24,8 +24,13 @@ extern uint32_t DATA_READY;
 
 
 
-//initializes mma8451 sensor
-//i2c has to already be enabled
+/* This function initializes accelerometer
+ *
+ * Parameters: None
+ *
+ * Returns: int  - if initialization is successful or not
+ *
+ * */
 int init_mma()
 {
 	//set active mode, 14 bit samples and 800 Hz ODR
@@ -35,6 +40,15 @@ int init_mma()
 
 
 
+/* This function reads all 3-axis of the accelerometer and
+ * update global variables.
+ *
+ * Parameters: None
+ *
+ * Returns: None
+ *  But this function updates global variables of acceleration in all 3-axis
+ *
+ * */
 void read_full_xyz()
 {
 	int i;
@@ -61,11 +75,19 @@ void read_full_xyz()
 	acc_X = temp[0]/4;
 	acc_Y = temp[1]/4;
 	acc_Z = temp[2]/4;
-
-
 }
 
 
+
+/* This function reads all 3-axis of the accelerometer and
+ * update global variables.
+ *
+ * Parameters: None
+ *
+ * Returns: None
+ *  But this function updates global variables of acceleration in all 3-axis
+ *
+ * */
 void read_xyz(void)
 {
 	// sign extend byte to 16 bits - need to cast to signed since function

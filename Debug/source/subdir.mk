@@ -15,6 +15,7 @@ C_SRCS += \
 ../source/led.c \
 ../source/mtb.c \
 ../source/semihost_hardfault.c \
+../source/state_machine.c \
 ../source/switch.c \
 ../source/sysclock.c \
 ../source/test_accelerometer.c \
@@ -33,6 +34,7 @@ OBJS += \
 ./source/led.o \
 ./source/mtb.o \
 ./source/semihost_hardfault.o \
+./source/state_machine.o \
 ./source/switch.o \
 ./source/sysclock.o \
 ./source/test_accelerometer.o \
@@ -51,6 +53,7 @@ C_DEPS += \
 ./source/led.d \
 ./source/mtb.d \
 ./source/semihost_hardfault.d \
+./source/state_machine.d \
 ./source/switch.d \
 ./source/sysclock.d \
 ./source/test_accelerometer.d \

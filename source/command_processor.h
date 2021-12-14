@@ -59,8 +59,9 @@ void help_handler();
 void measure_handler();
 
 
-void set0();
+void set0_handler();
 
+void test_handler();
 
 
 /********************************************************COMMAND TABLE********************************************************************/
@@ -68,7 +69,8 @@ static const command_table_t commands[] =
 {
 		{"author", author_handler,"\n\rauthor  - This command will print the name of the author who wrote the command line\n\r"},
 		{"measure",measure_handler,"measure - This command will start measuring the angle\n\r"},
-		{"set0",set0,"set0    - This command will set the current angle as 0\n\r"},
+		{"set0",set0_handler,"set0    - This command will set the current angle as 0\n\r"},
+		{"test",test_handler,"test    - This command run tests for checking the system\n\r"},
 		{"help", help_handler," "}
 };
 /*****************************************************************************************************************************************/
