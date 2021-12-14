@@ -8,6 +8,6 @@
 #ifndef TEST_LED_H_
 #define TEST_LED_H_
 
-void startup_test();
+void led_test();
 
 #endif /* TEST_LED_H_ */

@@ -107,8 +107,7 @@ void help_handler()
 
 void measure_handler(int argc, char *argv[])
 {
-	float target = atof(argv[1]),tilt=0, percentage = 0, calibration = 0;
-	//int previous_tilt_difference = 0, current_tilt_difference = 0;
+	float target = 0,tilt=0, percentage = 0, calibration = 0;
 
 	if((target > 180) || (target < 0))
 	{
@@ -138,8 +137,7 @@ void measure_handler(int argc, char *argv[])
 
 		percentage = tilt/target;
 
-
-		transition_to_any_state(0,percentage * 255, 0);
+		tpm_function(0,percentage * 255, 0);
 
 		printf("\n\rTilt : %f",tilt);
 

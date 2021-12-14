@@ -17,6 +17,7 @@ C_SRCS += \
 ../source/semihost_hardfault.c \
 ../source/switch.c \
 ../source/sysclock.c \
+../source/test_accelerometer.c \
 ../source/test_cbfifo.c \
 ../source/test_led.c 
 
@@ -34,6 +35,7 @@ OBJS += \
 ./source/semihost_hardfault.o \
 ./source/switch.o \
 ./source/sysclock.o \
+./source/test_accelerometer.o \
 ./source/test_cbfifo.o \
 ./source/test_led.o 
 
@@ -51,6 +53,7 @@ C_DEPS += \
 ./source/semihost_hardfault.d \
 ./source/switch.d \
 ./source/sysclock.d \
+./source/test_accelerometer.d \
 ./source/test_cbfifo.d \
 ./source/test_led.d 
 

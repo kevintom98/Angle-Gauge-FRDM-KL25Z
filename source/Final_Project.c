@@ -14,17 +14,66 @@
 #include "switch.h"
 #include "led.h"
 #include "test_led.h"
+#include "test_accelerometer.h"
 
 #include <stdio.h>
 
 /* TODO: insert other include files here. */
 
+typedef enum
+{
+	INIT,
+	TESTING,
+	COMMAND_PROCESSING
+}state_t;
+
+void initialize_systems()
+{
+	sysclock_init();
+
+	Init_UART0(BAUD_RATE);
+
+	test_cbfifo();
+
+    init_switch();
+
+    init_switch_interrupt();
+
+	i2c_init();
+
+	led_init();
+
+	tpm_config(48000);
+
+	if (!init_mma())
+	{
+		printf("\n\rCouldn't initialize Accelerometer");
+		tpm_function(255,0,0);
+		while (1)
+			;
+	}
+}
+
+
+void test_system()
+{
+	led_test();
+
+	test_accelerometer();
+
+}
 
 
 
 
 
 
+
+void statemachine()
+{
+
+	printf("\n\rStarting state machine");
+}
 
 
 /* TODO: insert other definitions and declarations here. */
@@ -35,41 +84,14 @@
 int main(void)
 {
 
-	sysclock_init();
+	initialize_systems();
 
-	Init_UART0(BAUD_RATE);
-
-	test_cbfifo();
-
-
-    init_switch();
-
-    init_switch_interrupt();
-
-	i2c_init();										/* init i2c	*/
-
-	led_init();
-
-	tpm_config(48000);
-
-	startup_test();
-
-
-
-
-
-	//Init_RGB_LEDs();
-
-	if (!init_mma())
-	{												/* init mma peripheral */
-		//Control_RGB_LEDs(1, 0, 0);
-		printf("\n\rCouldn't initialize Accelerometer");
-		tpm_function(255,0,0);
-		while (1)
-			;
-	}
+	test_system();
 
 	command_processor_start();
+
+
+
 
     return 0 ;
 }

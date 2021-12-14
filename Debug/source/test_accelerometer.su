@@ -1,0 +1,2 @@
+test_accelerometer.c:14:6:test_angle	24	static
+test_accelerometer.c:37:6:test_accelerometer	8	static
