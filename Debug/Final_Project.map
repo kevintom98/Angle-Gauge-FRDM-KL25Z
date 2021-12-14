@@ -2210,7 +2210,6 @@ END GROUP
                 0x00002364                sysclock_init
  .text.test_angle
                 0x000023dc       0xa0 ./source/test_accelerometer.o
-                0x000023dc                test_angle
  .text.test_accelerometer
                 0x0000247c      0x104 ./source/test_accelerometer.o
                 0x0000247c                test_accelerometer
@@ -2745,7 +2744,7 @@ OUTPUT(Final_Project.axf elf32-littlearm)
  .debug_info    0x00006b7f     0x140a ./drivers/fsl_uart.o
  .debug_info    0x00007f89      0x439 ./CMSIS/system_MKL25Z4.o
 
-.debug_abbrev   0x00000000     0x23eb
+.debug_abbrev   0x00000000     0x23e9
  .debug_abbrev  0x00000000      0x2d7 ./utilities/fsl_debug_console.o
  .debug_abbrev  0x000002d7      0x18d ./startup/startup_mkl25z4.o
  .debug_abbrev  0x00000464      0x17b ./source/Accelerometer.o
@@ -2762,13 +2761,13 @@ OUTPUT(Final_Project.axf elf32-littlearm)
  .debug_abbrev  0x00001345      0x129 ./source/state_machine.o
  .debug_abbrev  0x0000146e      0x1b7 ./source/switch.o
  .debug_abbrev  0x00001625       0xef ./source/sysclock.o
- .debug_abbrev  0x00001714      0x101 ./source/test_accelerometer.o
- .debug_abbrev  0x00001815      0x11c ./source/test_cbfifo.o
- .debug_abbrev  0x00001931       0xc3 ./source/test_led.o
- .debug_abbrev  0x000019f4      0x275 ./drivers/fsl_common.o
- .debug_abbrev  0x00001c69      0x309 ./drivers/fsl_lpsci.o
- .debug_abbrev  0x00001f72      0x323 ./drivers/fsl_uart.o
- .debug_abbrev  0x00002295      0x156 ./CMSIS/system_MKL25Z4.o
+ .debug_abbrev  0x00001714       0xff ./source/test_accelerometer.o
+ .debug_abbrev  0x00001813      0x11c ./source/test_cbfifo.o
+ .debug_abbrev  0x0000192f       0xc3 ./source/test_led.o
+ .debug_abbrev  0x000019f2      0x275 ./drivers/fsl_common.o
+ .debug_abbrev  0x00001c67      0x309 ./drivers/fsl_lpsci.o
+ .debug_abbrev  0x00001f70      0x323 ./drivers/fsl_uart.o
+ .debug_abbrev  0x00002293      0x156 ./CMSIS/system_MKL25Z4.o
 
 .debug_aranges  0x00000000      0x7d8
  .debug_aranges
@@ -4004,7 +4003,6 @@ sysclock_init                                     ./source/sysclock.o
                                                   ./source/state_machine.o
 test_accelerometer                                ./source/test_accelerometer.o
                                                   ./source/state_machine.o
-test_angle                                        ./source/test_accelerometer.o
 test_cbfifo                                       ./source/test_cbfifo.o
                                                   ./source/state_machine.o
 test_handler                                      ./source/command_processor.o
