@@ -46,3 +46,14 @@ Code forPES-Final_Project, ECEN-5813,  Fall 2021
     
 ## Terminal Parameters    
  ![Terminal_Parametrs](/Screenshots/Connection_Parameters.JPG)   
+ 
+ 
+## LED Testing GUI Screenshot
+  ![LED_Testing](/Screenshots/LED_testing message.JPG)
+  
+  
+## CMD GUI
+  ![CMD_GUI](/Screenshots/CMD_GUI.JPG)
+  
+  
+  
