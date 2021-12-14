@@ -11,6 +11,15 @@
 #include "Delay.h"
 
 
+
+/*
+ * This function runs automatic tests to test LEDs
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 void led_test()
 {
 

@@ -22,6 +22,8 @@
 
 
 
+
+//Enums defining states
 typedef enum
 {
 	INIT,
@@ -34,6 +36,15 @@ state_t state = INIT;
 
 
 
+/*This function is kept in this file since it is only used by state_machine function*/
+/*
+ * This function calls all the initialization functions
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 void initialize_systems()
 {
 	sysclock_init();
@@ -62,6 +73,18 @@ void initialize_systems()
 }
 
 
+
+
+/*This function is kept in this file since it is only used by state_machine function and in command processor
+ * and it is only two lines*/
+/*
+ * This function calls all the testing functions
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 void test_system()
 {
 	led_test();
@@ -75,7 +98,15 @@ void test_system()
 
 
 
-
+/*
+ * This function has the state machine loops and takes care of
+ * state swithcing
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 void statemachine()
 {
 	while(1)

@@ -11,7 +11,17 @@
 #include "Accelerometer.h"
 #include "test_accelerometer.h"
 
-void test_angle(float target)
+
+
+/*
+ * This function measures angle til target angle is reached
+ *
+ * Parameters : float target - target angle
+ *
+ * Returns : None
+ *
+ * */
+static void test_angle(float target)
 {
 	float tilt = 0;
 
@@ -34,6 +44,16 @@ void test_angle(float target)
 	}
 }
 
+
+/*
+ * This function runs manual tests on accelerometer.
+ * This function calls test_able function
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 void test_accelerometer()
 {
 

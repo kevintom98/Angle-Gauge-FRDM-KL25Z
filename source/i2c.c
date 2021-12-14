@@ -3,6 +3,9 @@
  *
  *  Created on: 08-Dec-2021
  *      Author: Kevin Tom
+ *
+ *  This code is inspired from,
+ * 	https://github.com/alexander-g-dean/ESF/blob/master/NXP/Code/Chapter_8
  */
 
 #include <MKL25Z4.H>

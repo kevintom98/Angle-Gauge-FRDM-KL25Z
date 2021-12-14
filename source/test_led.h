@@ -7,7 +7,14 @@
 
 #ifndef TEST_LED_H_
 #define TEST_LED_H_
-
+/*
+ * This function runs automatic tests to test LEDs
+ *
+ * Parameters : None
+ *
+ * Returns : None
+ *
+ * */
 void led_test();
 
 #endif /* TEST_LED_H_ */
